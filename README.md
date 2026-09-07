@@ -2,7 +2,7 @@
 
 Portfolio เว็บแอปส่วนตัวของ นิชา วันวอน (หยก) นักศึกษาปี 4 สาขาวิทยาการคอมพิวเตอร์และนวัตกรรมการพัฒนาซอฟต์แวร์ มหาวิทยาลัยศรีปทุม จัดทำเพื่อใช้สมัครฝึกงาน/งานสาย Full-Stack Developer
 
-**Live URL:** _(ใส่ลิงก์ Vercel ของคุณหลัง deploy เสร็จ เช่น `https://portfolio-nicha.vercel.app`)_
+**Live URL:** _(ใส่ลิงก์ Vercel ของคุณหลัง deploy เสร็จ เช่น `https://portfolio-nicha-liart.vercel.app/`)_
 
 ---
 
