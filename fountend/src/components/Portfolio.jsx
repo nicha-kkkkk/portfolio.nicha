@@ -46,6 +46,11 @@ const I18N = {
   expLi3: { th: "จัดการข้อมูลและเอกสารเพื่อสนับสนุนการปฏิบัติงานของฝ่ายอำนวยการ", en: "Managed data and documents to support the General Affairs Division's operations." },
   footerH2: { th: "มาคุยกัน", en: "Let's talk" },
   footerP: { th: "เปิดรับโอกาสฝึกงานและงาน Full-Stack Developer — ทักมาได้เลย", en: "Open to internship and Full-Stack Developer opportunities — feel free to reach out." },
+  ctaCV: { th: "ดาวน์โหลด CV", en: "Download CV" },
+  docsLabel: { th: "เอกสารดาวน์โหลด", en: "Documents" },
+  dlCV: { th: "CV", en: "CV" },
+  dlResume: { th: "Resume", en: "Resume" },
+  dlTranscript: { th: "Transcript", en: "Transcript" },
 };
 
 const skillGroups = [
@@ -319,6 +324,15 @@ export default function Portfolio2() {
   .p2-foot{padding:70px 0 50px;position:relative;}
   .p2-foot h2{font-size:30px;margin:0 0 14px;font-weight:800;}
   .p2-foot p{color:var(--muted);max-width:460px;margin:0 0 32px;font-size:15.5px;}
+  .p2-docs{margin-bottom:34px;}
+  .p2-docs-label{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted-2);margin-bottom:12px;}
+  .p2-docs-row{display:flex;flex-wrap:wrap;gap:10px;}
+  .p2-doc-btn{
+    font-family:'Space Grotesk';font-weight:600;font-size:13.5px;color:var(--ink);
+    border:1.5px solid var(--line);padding:9px 16px;border-radius:20px;text-decoration:none;
+    background:#fff;transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .p2-doc-btn:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:3px 4px 0 var(--pink);}
   .p2-contact{display:flex;flex-direction:column;gap:2px;margin-bottom:36px;}
   .p2-contact a,.p2-contact .row{display:flex;align-items:center;justify-content:space-between;padding:15px 4px;border-bottom:1px solid var(--line);text-decoration:none;font-family:'Space Grotesk';font-size:16px;font-weight:600;transition:padding-left .25s ease, color .25s ease;}
   .p2-contact a:hover{padding-left:12px;color:var(--blue);}
@@ -417,6 +431,7 @@ export default function Portfolio2() {
               <div className="p2-ctas">
                 <a href="#work" className="p2-btn primary">{t("ctaView")}</a>
                 <a href="mailto:nichawanwon@gmail.com" className="p2-btn">{t("ctaContact")}</a>
+                <a href="/docs/Nicha_Wanwon_CV.pdf" download className="p2-btn">{t("ctaCV")}</a>
               </div>
             </div>
             <div className="p2-photo-wrap">
@@ -553,6 +568,14 @@ export default function Portfolio2() {
         <div className="p2-wrap">
           <Reveal as="h2">{t("footerH2")}</Reveal>
           <Reveal as="p">{t("footerP")}</Reveal>
+          <Reveal className="p2-docs">
+            <div className="p2-docs-label">{t("docsLabel")}</div>
+            <div className="p2-docs-row">
+              <a href="/docs/Nicha_Wanwon_CV.pdf" download className="p2-doc-btn">⬇ {t("dlCV")}</a>
+              <a href="/docs/Nicha_Wanwon_Resume.pdf" download className="p2-doc-btn">⬇ {t("dlResume")}</a>
+              <a href="/docs/Nicha_Wanwon_Transcript.pdf" download className="p2-doc-btn">⬇ {t("dlTranscript")}</a>
+            </div>
+          </Reveal>
           <Reveal className="p2-contact">
             <a href="mailto:nichawanwon@gmail.com"><span>nichawanwon@gmail.com</span><span className="k">email</span></a>
             <a href="tel:+66990979480"><span>099-097-9480</span><span className="k">phone</span></a>
