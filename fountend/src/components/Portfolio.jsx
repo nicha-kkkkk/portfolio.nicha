@@ -51,7 +51,44 @@ const I18N = {
   dlCV: { th: "CV", en: "CV" },
   dlResume: { th: "Resume", en: "Resume" },
   dlTranscript: { th: "Transcript", en: "Transcript" },
+  lastUpdated: { th: "อัปเดตล่าสุด", en: "Last updated" },
+  justNow: { th: "เมื่อสักครู่", en: "just now" },
 };
+
+/* ---------- last-updated badge ---------- */
+// __BUILD_TIME__ ถูกฉีดเข้ามาตอน build โดย vite.config.js (ดู `define`)
+// จึงเท่ากับเวลาที่ deploy ล่าสุดเสมอ ไม่ต้องแก้มือ
+// eslint-disable-next-line no-undef
+const LAST_UPDATED = typeof __BUILD_TIME__ !== "undefined" ? __BUILD_TIME__ : new Date().toISOString();
+
+function getTimeAgo(isoString, lang) {
+  const updated = new Date(isoString);
+  const now = new Date();
+  const diffMs = now.getTime() - updated.getTime();
+  const minutes = Math.max(0, Math.floor(diffMs / 60000));
+  const hours = Math.floor(minutes / 60);
+
+  // นับ "วัน" จากการข้ามเที่ยงคืนจริง ๆ ไม่ใช่จากจำนวนชั่วโมงสะสมครบ 24
+  const startOfUpdated = new Date(updated.getFullYear(), updated.getMonth(), updated.getDate());
+  const startOfNow = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayDiff = Math.round((startOfNow - startOfUpdated) / 86400000);
+
+  if (dayDiff <= 0) {
+    if (minutes < 1) return I18N.justNow[lang];
+    if (minutes < 60) return lang === "th" ? `${minutes} นาทีที่แล้ว` : `${minutes} min ago`;
+    return lang === "th" ? `${hours} ชั่วโมงที่แล้ว` : `${hours} hr ago`;
+  }
+  return lang === "th" ? `${dayDiff} วันที่แล้ว` : `${dayDiff} day${dayDiff === 1 ? "" : "s"} ago`;
+}
+
+function getUpdatedDateLabel(isoString, lang) {
+  const d = new Date(isoString);
+  return d.toLocaleDateString(lang === "th" ? "th-TH-u-ca-buddhist" : "en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 const skillGroups = [
   { cat: "Front-end", items: ["HTML5", "CSS3", "JavaScript", "React"] },
@@ -174,6 +211,15 @@ export default function Portfolio2() {
     const id = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(id);
   }, []);
+
+  // eslint-disable-next-line no-unused-vars
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(id);
+  }, []);
+  const timeAgo = getTimeAgo(LAST_UPDATED, lang);
+  const updatedDateLabel = getUpdatedDateLabel(LAST_UPDATED, lang);
 
   const nameWords = t("name").split(" ");
 
@@ -378,6 +424,22 @@ export default function Portfolio2() {
     .blob, .p2-photo-badge, .p2-status .dot{animation:none !important;}
     .reveal, .p2-name .word, .p2-entry, .p2-chip, .p2-btn{transition:none !important;}
   }
+
+  /* last-updated corner badge */
+  .p2-updated{
+    position:fixed;left:14px;bottom:14px;z-index:25;display:flex;align-items:center;gap:7px;
+    background:rgba(255,253,248,.9);backdrop-filter:blur(8px);border:1px solid var(--line);
+    border-radius:20px;padding:7px 13px;font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);
+    box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  .p2-updated .dot{width:6px;height:6px;border-radius:50%;background:#5fc98a;flex-shrink:0;animation:pulse 2s infinite;}
+  .p2-updated b{color:var(--ink);font-weight:600;}
+  @media(max-width:640px){
+    .p2-updated{left:10px;bottom:10px;padding:6px 10px;font-size:10px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .p2-updated .dot{animation:none !important;}
+  }
       `}</style>
 
       <div className="blob blob1"></div>
@@ -430,7 +492,7 @@ export default function Portfolio2() {
               <p className="p2-intro">{t("intro")}</p>
               <div className="p2-ctas">
                 <a href="#work" className="p2-btn primary">{t("ctaView")}</a>
-                <a href="mailto:nichawanwon@gmail.com" className="p2-btn">{t("ctaContact")}</a>
+                <a href="#contact" className="p2-btn">{t("ctaContact")}</a>
                 <a href="/docs/Nicha_Wanwon_CV.pdf" download className="p2-btn">{t("ctaCV")}</a>
               </div>
             </div>
@@ -595,6 +657,11 @@ export default function Portfolio2() {
           <img src={lightbox} alt="Project poster" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
+
+      <div className="p2-updated" title={updatedDateLabel}>
+        <span className="dot"></span>
+        <span>{t("lastUpdated")}: <b>{timeAgo}</b> · {updatedDateLabel}</span>
+      </div>
     </div>
   );
 }
