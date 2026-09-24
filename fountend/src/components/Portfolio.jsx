@@ -78,7 +78,15 @@ function getTimeAgo(isoString, lang) {
     if (minutes < 60) return lang === "th" ? `${minutes} นาทีที่แล้ว` : `${minutes} min ago`;
     return lang === "th" ? `${hours} ชั่วโมงที่แล้ว` : `${hours} hr ago`;
   }
-  return lang === "th" ? `${dayDiff} วันที่แล้ว` : `${dayDiff} day${dayDiff === 1 ? "" : "s"} ago`;
+  if (dayDiff < 30) {
+    return lang === "th" ? `${dayDiff} วันที่แล้ว` : `${dayDiff} day${dayDiff === 1 ? "" : "s"} ago`;
+  }
+  if (dayDiff < 365) {
+    const monthDiff = Math.round(dayDiff / 30);
+    return lang === "th" ? `${monthDiff} เดือนที่แล้ว` : `${monthDiff} month${monthDiff === 1 ? "" : "s"} ago`;
+  }
+  const yearDiff = Math.round(dayDiff / 365);
+  return lang === "th" ? `${yearDiff} ปีที่แล้ว` : `${yearDiff} year${yearDiff === 1 ? "" : "s"} ago`;
 }
 
 function getUpdatedDateLabel(isoString, lang) {
